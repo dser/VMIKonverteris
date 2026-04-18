@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<title>VMI Investicines Saskaitos Konverteris</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #008080;
+  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+/* ---- WINDOW ---- */
+.window {
+  width: 700px;
+  margin: 20px auto;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  box-shadow: 1px 1px 0 #000;
+}
+
+/* ---- TITLE BAR ---- */
+.title-bar {
+  background: #000080;
+  color: #fff;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 11px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.title-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.title-icon {
+  width: 14px;
+  height: 14px;
+  background: #c0c0c0;
+  border: 1px solid #808080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: #000;
+  font-weight: bold;
+}
+.title-btns {
+  display: flex;
+  gap: 2px;
+}
+.tbtn {
+  width: 16px;
+  height: 14px;
+  background: #c0c0c0;
+  border: 1px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  font-size: 8px;
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  font-family: "MS Sans Serif", Arial, sans-serif;
+  line-height: 1;
+}
+
+/* ---- MENU BAR ---- */
+.menubar {
+  background: #c0c0c0;
+  border-bottom: 1px solid #808080;
+  padding: 1px 2px;
+}
+.menu-item {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: default;
+}
+.menu-item:hover {
+  background: #000080;
+  color: #fff;
+}
+a.menu-item {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ---- TABS ---- */
+.tab-strip {
+  padding: 6px 8px 0;
+}
+.tab {
+  display: inline-block;
+  padding: 3px 10px 4px;
+  border: 2px solid;
+  border-color: #ffffff #808080 transparent #ffffff;
+  background: #b0b0b0;
+  cursor: pointer;
+  margin-right: 2px;
+  position: relative;
+  bottom: -2px;
+  font-size: 11px;
+  border-bottom: none;
+}
+.tab.active {
+  background: #c0c0c0;
+  font-weight: bold;
+  z-index: 2;
+  border-color: #ffffff #808080 #c0c0c0 #ffffff;
+}
+.tab-border {
+  border-top: 2px solid #808080;
+  margin: 0 6px;
+}
+
+/* ---- CONTENT ---- */
+.content {
+  padding: 8px 10px 10px;
+}
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ---- FIELDSET / GROUPBOX ---- */
+fieldset {
+  border: 1px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  padding: 8px 10px 10px;
+  margin-bottom: 8px;
+}
+legend {
+  padding: 0 3px;
+  font-size: 11px;
+}
+
+/* ---- FORM ROWS ---- */
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.row:last-child { margin-bottom: 0; }
+.lbl {
+  width: 210px;
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 7px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  background: #fff;
+  padding: 1px 3px;
+  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  outline: none;
+}
+input[type="text"] { width: 300px; }
+input[type="number"] { width: 90px; }
+select { width: 300px; }
+
+.file-wrap {
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  background: #fff;
+  padding: 4px 5px;
+  margin-top: 4px;
+}
+input[type="file"] {
+  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  width: 100%;
+}
+.file-hint {
+  font-size: 10px;
+  color: #555;
+  margin-top: 3px;
+  padding-left: 1px;
+}
+
+/* ---- SEPARATOR ---- */
+.sep {
+  border: none;
+  border-top: 1px solid #808080;
+  border-bottom: 1px solid #ffffff;
+  margin: 8px 0;
+}
+
+/* ---- BUTTON ---- */
+.btn {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  padding: 3px 18px;
+  font-family: "MS Sans Serif", Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  min-width: 80px;
+}
+.btn:active {
+  border-color: #404040 #ffffff #ffffff #404040;
+  padding: 4px 17px 2px 19px;
+}
+.btn:disabled {
+  color: #808080;
+  text-shadow: 1px 1px 0 #fff;
+  cursor: default;
+}
+
+/* ---- NOTE BOX ---- */
+.note {
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  background: #ffffe1;
+  padding: 5px 7px;
+  margin-bottom: 8px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #222;
+}
+
+/* ---- ACTIONS ROW ---- */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.proc-text {
+  font-size: 10px;
+  color: #555;
+}
+
+/* ---- COMING SOON ---- */
+.coming-soon {
+  text-align: center;
+  padding: 28px 0 20px;
+  color: #444;
+  line-height: 1.8;
+}
+.cs-icon {
+  font-size: 28px;
+  font-weight: bold;
+  color: #808080;
+  margin-bottom: 6px;
+}
+
+/* ---- HELP DIALOG ---- */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+.dialog {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  box-shadow: 2px 2px 0 #000;
+  width: 590px;
+}
+.dialog .title-bar {
+  background: #000080;
+  color: #fff;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 11px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.dialog-body {
+  padding: 10px 12px 12px;
+}
+.dialog-body p {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+.codes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 10px;
+  font-size: 11px;
+}
+.codes-table th {
+  text-align: left;
+  border-bottom: 1px solid #808080;
+  padding: 2px 6px 3px;
+  background: #c0c0c0;
+  font-weight: bold;
+}
+.codes-table td {
+  padding: 2px 6px;
+  vertical-align: top;
+  border-bottom: 1px solid #dfdfdf;
+}
+.codes-table td:first-child {
+  font-weight: bold;
+  width: 36px;
+  color: #000080;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0 4px;
+}
+.dialog-note {
+  font-size: 10px;
+  color: #555;
+}
+
+/* ---- STATUS BAR ---- */
+.statusbar {
+  background: #c0c0c0;
+  border-top: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  padding: 2px 4px;
+  display: flex;
+  min-height: 20px;
+}
+.status-panel {
+  border: 1px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+  padding: 1px 6px;
+  flex: 1;
+  font-size: 10px;
+  line-height: 1.4;
+}
+.status-panel.err { color: #cc0000; }
+.status-panel.ok  { color: #005500; }
+</style>
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
+  posthog.init('phc_yBehue5vAD6RbsCCw4vuFbRNrcm8awvfJvbBgF55WdJ2', { api_host: 'https://us.i.posthog.com' });
+</script>
+</head>
+<body>
+
+<div class="window">
+
+  <!-- Title bar -->
+  <div class="title-bar">
+    <div class="title-left">
+      <div class="title-icon">V</div>
+      VMI Investicinės Sąskaitos Konverteris
+    </div>
+    <div class="title-btns">
+      <div class="tbtn">_</div>
+      <div class="tbtn">[]</div>
+      <div class="tbtn">X</div>
+    </div>
+  </div>
+
+  <!-- Menu bar -->
+  <div class="menubar">
+    <span class="menu-item">Failas</span>
+    <span class="menu-item" onclick="document.getElementById('help-overlay').classList.add('open'); posthog.capture('help_opened')">Pagalba</span>
+    <a class="menu-item" href="https://buymeacoffee.com/pirkimopardavimo" target="_blank" rel="noopener noreferrer" onclick="posthog.capture('donate_clicked')">Paremti ☕</a>
+  </div>
+
+  <!-- Tabs -->
+  <div style="padding: 6px 8px 0; background:#c0c0c0;">
+    <div class="tab active" onclick="showTab('process',this)">2025 Išrašas</div><div class="tab" onclick="showTab('pre2025',this)">Iki 2025 (netrukus)</div>
+  </div>
+  <div class="tab-border"></div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- === PROCESS PANEL === -->
+    <div id="panel-process" class="panel active">
+
+      <div style="height:6px;"></div>
+
+      <div class="note">
+        <b>(!)</b> DIVIDEND TAX eilutės <b>neįtraukiamos</b> į VMI dokumentą.<br>
+        Mokesčiai už Dividendus pagal VMI investicinės sąskaitos taisykles -  netraukiami į VMI deklarciją
+      </div>
+
+      <fieldset>
+        <legend>Saskaitos informacija</legend>
+        <div style="height:4px;"></div>
+        <div class="row">
+          <span class="lbl">Sąskaitos numeris:</span>
+          <input type="text" id="account_number" placeholder="pvz. LT123456789012">
+        </div>
+        <div class="row">
+          <span class="lbl">Sąskaitos tipas:</span>
+          <select id="account_type" onchange="onType()">
+            <option value="">-- Pasirinkite --</option>
+            <option value="trading">Revolut Trading / Brokerage</option>
+            <option value="savings">Revolut Flexible Cash Fund</option>
+            <option value="robo">Revolut Robo Advisor</option>
+            <option value="_commodities">Revolut Commodities (nepalaikoma)</option>
+          </select>
+        </div>
+        <div class="row">
+          <span class="lbl">Deklaruojami metai:</span>
+          <input type="number" id="year" value="2025" min="2020" max="2035">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Išrašas (CSV Formatu)</legend>
+        <div class="file-wrap">
+          <input type="file" id="csv_file" accept=".csv">
+        </div>
+        <div class="file-hint" id="file_hint">Pasirinkite saskaitos tipą.</div>
+      </fieldset>
+
+      <hr class="sep">
+
+      <div class="actions">
+        <span class="proc-text" id="proc_text"></span>
+        <button type="button" class="btn" id="proc_btn" onclick="processFile()">Apdoroti ir Atsisiųsti</button>
+      </div>
+
+    </div><!-- /panel-process -->
+
+    <!-- === PRE-2025 PANEL === -->
+    <div id="panel-pre2025" class="panel">
+      <div class="coming-soon">
+        <div class="cs-icon">[?]</div>
+        <b>In Progress</b><br><br>
+        Cia galesite ivesti turto buvusi investicineje saskaitoje<br>
+        iki 2025-01-01 ir sugeneruoti IS kodines eilutes VMI dokumentui.
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <div class="status-panel" id="status_panel">  </div>
+  </div>
+
+</div><!-- /window -->
+
+<!-- HELP DIALOG -->
+<div class="overlay" id="help-overlay" onclick="closeHelp(event)">
+  <div class="dialog">
+    <div class="title-bar">
+      <span>Pagalba &mdash; VMI laukų reikšmės</span>
+      <div class="tbtn" onclick="document.getElementById('help-overlay').classList.remove('open')">X</div>
+    </div>
+    <div class="dialog-body">
+      <p>Sugeneruotame <b>.xlsx</b> faile stulpelis <b>„rusis"</b> nurodo operacijos tipą pagal VMI investicinės sąskaitos taisykles:</p>
+      <table class="codes-table">
+        <tr><th>Kodas</th><th>Reikšmė</th><th>Kada naudojama</th></tr>
+        <tr>
+          <td>II</td>
+          <td>Įneštos lėšos</td>
+          <td>Kiekvieną kartą, kai pervedate pinigus į investicinę sąskaitą (CASH TOP-UP)</td>
+        </tr>
+        <tr>
+          <td>PP</td>
+          <td>Išimtos lėšos</td>
+          <td>Kiekvieną kartą, kai išimate pinigus iš investicinės sąskaitos (CASH WITHDRAWAL)</td>
+        </tr>
+        <tr>
+          <td>IV</td>
+          <td>Dividendai / palūkanos</td>
+          <td>Gauti dividendai iš akcijų ar palūkanos iš fondų (DIVIDEND, Interest PAID). <b>DIVIDEND TAX netraukiamas</b> &mdash; mokestis jau išskaičiuotas prie šaltinio.</td>
+        </tr>
+        <tr>
+          <td>IS</td>
+          <td>Turtas iki 2025-01-01</td>
+          <td>Turtas, buvęs sąskaitoje prieš priskiriant ją investicinei. Naudojama tik kartą &mdash; skiltyje „Iki 2025" (dar kuriama).</td>
+        </tr>
+      </table>
+      <p class="dialog-note">Kiti laukai: <b>saskaita</b> &mdash; jūsų įvestas sąskaitos numeris &nbsp;|&nbsp; <b>data</b> &mdash; operacijos data &nbsp;|&nbsp; <b>suma</b> &mdash; EUR suma &nbsp;|&nbsp; <b>valstybe</b> &mdash; LT</p>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn" onclick="document.getElementById('help-overlay').classList.remove('open')">Gerai</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const HINTS = {
+  trading:  '',
+  savings:  '',
+  robo:     '',
+  _commodities: 'Nepalaikoma: CSV neparodo EUR sumos. Kreipkites veliau.',
+};
+
+function showTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+  posthog.capture('tab_switched', { tab: name });
+}
+
+function onType() {
+  const t = document.getElementById('account_type').value;
+  document.getElementById('file_hint').textContent =
+    HINTS[t] || 'Pasirinkite saskaitos tipa, kad pamatytu kaip gauti israsa.';
+}
+
+async function processFile() {
+  const num  = document.getElementById('account_number').value.trim();
+  const type = document.getElementById('account_type').value;
+  const year = document.getElementById('year').value;
+  const file = document.getElementById('csv_file').files[0];
+
+  if (!num)                        return setStatus('Klaida: iveskite saskaitos numeri.', 'err');
+  if (!type || type[0] === '_')    return setStatus('Klaida: pasirinkite tinkama saskaitos tipa.', 'err');
+  if (!file)                       return setStatus('Klaida: pasirinkite CSV faila.', 'err');
+
+  setStatus('Apdorojama...', '');
+  document.getElementById('proc_text').textContent = 'Prasome palaukti...';
+  document.getElementById('proc_btn').disabled = true;
+
+  const form = new FormData();
+  form.append('account_number', num);
+  form.append('account_type', type);
+  form.append('year', year);
+  form.append('file', file);
+
+  try {
+    const res = await fetch('/api/process', { method: 'POST', body: form });
+
+    if (res.ok) {
+      const blob = await res.blob();
+      const filename = res.headers.get('X-Filename') || 'VMI_export.xlsx';
+      const count    = res.headers.get('X-Row-Count') || '?';
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setStatus('Sekmingai: ' + count + ' eiluciu sugeneruota. Failas atsisiunctas.', 'ok');
+      posthog.capture('file_processed', { account_type: type, year, row_count: parseInt(count) || 0 });
+    } else {
+      const err = await res.json().catch(() => ({ detail: 'Neatpazinta serverio klaida.' }));
+      setStatus('Klaida: ' + err.detail, 'err');
+      posthog.capture('file_process_error', { account_type: type, year, error: err.detail });
+    }
+  } catch (e) {
+    setStatus('Rysio klaida: ' + e.message, 'err');
+  } finally {
+    document.getElementById('proc_text').textContent = '';
+    document.getElementById('proc_btn').disabled = false;
+  }
+}
+
+function closeHelp(e) {
+  if (e.target === document.getElementById('help-overlay')) {
+    document.getElementById('help-overlay').classList.remove('open');
+  }
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('status_panel');
+  el.textContent = msg;
+  el.className = 'status-panel' + (cls ? ' ' + cls : '');
+}
+</script>
+</body>
+</html>
