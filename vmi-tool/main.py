@@ -4,7 +4,7 @@ import unicodedata
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from processors import robo, savings, trading
@@ -16,9 +16,30 @@ static_path = Path(__file__).parent / "static"
 app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
 
 
+DOMAIN = "https://vmikonverteris-production.up.railway.app"
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index():
     return (static_path / "index.html").read_text(encoding="utf-8")
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse)
+async def robots():
+    return f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n"
+
+
+@app.get("/sitemap.xml", response_class=Response)
+async def sitemap():
+    content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{DOMAIN}/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>"""
+    return Response(content=content, media_type="application/xml")
 
 
 @app.post("/api/process")
